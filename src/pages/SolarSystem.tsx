@@ -5,6 +5,7 @@ import Layout from '../components/layout/Layout';
 import PlanetCard, { PlanetData } from '../components/solar/PlanetCard';
 import AgeCalculator from '../components/solar/AgeCalculator';
 import LightSpeedVisualizer from '../components/solar/LightSpeedVisualizer';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // Planet data - texture URLs should be replaced with actual image paths
 const planetData: PlanetData[] = [
@@ -93,6 +94,7 @@ const planetData: PlanetData[] = [
 const SolarSystem = () => {
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [ageResults, setAgeResults] = useState<{planet: PlanetData, age: number}[]>([]);
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -109,6 +111,10 @@ const SolarSystem = () => {
       setSelectedPlanet(planet);
     }
   };
+
+  const handleAgeCalculated = (results: {planet: PlanetData, age: number}[]) => {
+    setAgeResults(results);
+  };
   
   return (
     <Layout>
@@ -118,7 +124,7 @@ const SolarSystem = () => {
         transition={{ duration: 1 }}
         className="container mx-auto px-4 py-16"
       >
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold font-space tracking-wider text-cosmic-accent2"
             initial={{ y: -50, opacity: 0 }}
@@ -138,6 +144,66 @@ const SolarSystem = () => {
           </motion.p>
         </div>
         
+        {/* Age Calculator at the top */}
+        <div className="mb-12">
+          <AgeCalculator planets={planetData} onCalculate={handleAgeCalculated} />
+        </div>
+        
+        {/* Age Results Carousel */}
+        {ageResults.length > 0 && (
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl font-space font-bold text-cosmic-accent1 mb-6 text-center">
+              Your Cosmic Age Journey
+            </h2>
+            <Carousel className="w-full">
+              <CarouselContent>
+                {ageResults.map(({ planet, age }) => (
+                  <CarouselItem key={planet.id} className="md:basis-1/2 lg:basis-1/3">
+                    <motion.div 
+                      className="p-6 rounded-xl backdrop-blur-md h-full"
+                      style={{ backgroundColor: `${planet.color}20`, border: `1px solid ${planet.color}40` }}
+                      whileHover={{ scale: 1.03, boxShadow: `0 10px 25px ${planet.color}30` }}
+                    >
+                      <div className="flex items-center gap-4 mb-3">
+                        <div 
+                          className="w-16 h-16 rounded-full shrink-0"
+                          style={{ 
+                            backgroundImage: `url(${planet.texture})`,
+                            backgroundSize: 'cover',
+                            boxShadow: `0 0 15px ${planet.color}40`
+                          }}
+                        ></div>
+                        <div>
+                          <h3 className="text-xl font-space font-bold" style={{ color: planet.color }}>
+                            {planet.name}
+                          </h3>
+                          <div className="text-3xl font-space font-bold mt-1 flex items-baseline gap-2">
+                            <span style={{ color: planet.color }}>{age}</span>
+                            <span className="text-white/70 text-lg">years old</span>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-white/80 text-sm">
+                        {planet.description}
+                      </p>
+                    </motion.div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="flex justify-center mt-4 gap-2">
+                <CarouselPrevious className="position-static transform-none" />
+                <CarouselNext className="position-static transform-none" />
+              </div>
+            </Carousel>
+          </motion.div>
+        )}
+        
+        {/* Planets Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {planetData.map(planet => (
             <PlanetCard 
@@ -150,8 +216,8 @@ const SolarSystem = () => {
           ))}
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          <AgeCalculator planets={planetData} />
+        {/* Light Speed Visualizer */}
+        <div className="mb-16">
           <LightSpeedVisualizer planets={planetData} selectedPlanet={selectedPlanet} />
         </div>
         

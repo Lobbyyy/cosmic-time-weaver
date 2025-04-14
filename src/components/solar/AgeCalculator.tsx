@@ -8,9 +8,10 @@ import { CakeIcon } from 'lucide-react';
 
 type AgeCalculatorProps = {
   planets: PlanetData[];
+  onCalculate?: (results: {planet: PlanetData, age: number}[]) => void;
 };
 
-const AgeCalculator: React.FC<AgeCalculatorProps> = ({ planets }) => {
+const AgeCalculator: React.FC<AgeCalculatorProps> = ({ planets, onCalculate }) => {
   const [age, setAge] = useState<string>('');
   const [results, setResults] = useState<{planet: PlanetData, age: number}[]>([]);
   
@@ -28,6 +29,11 @@ const AgeCalculator: React.FC<AgeCalculatorProps> = ({ planets }) => {
     });
     
     setResults(calculatedAges);
+    
+    // Notify parent component of the results
+    if (onCalculate) {
+      onCalculate(calculatedAges);
+    }
   };
   
   return (
