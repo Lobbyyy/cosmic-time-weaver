@@ -6,6 +6,8 @@ import PlanetCard, { PlanetData } from '../components/solar/PlanetCard';
 import AgeCalculator from '../components/solar/AgeCalculator';
 import LightSpeedVisualizer from '../components/solar/LightSpeedVisualizer';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
 
 // Planet data - texture URLs should be replaced with actual image paths
 const planetData: PlanetData[] = [
@@ -103,6 +105,8 @@ const SolarSystem = () => {
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [ageResults, setAgeResults] = useState<{planet: PlanetData, age: number}[]>([]);
+  const [emblaRef, emblaApi] = useEmblaCarousel();
+  const [activeSlide, setActiveSlide] = useState(0);
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -111,6 +115,18 @@ const SolarSystem = () => {
     
     return () => clearInterval(timer);
   }, []);
+  
+  // Update active slide when carousel scrolls
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    const onSelect = () => {
+      setActiveSlide(emblaApi.selectedScrollSnap());
+    };
+    
+    emblaApi.on('select', onSelect);
+    return () => emblaApi.off('select', onSelect);
+  }, [emblaApi]);
   
   const handleSelectPlanet = (planet: PlanetData) => {
     if (selectedPlanet?.id === planet.id) {
@@ -122,6 +138,13 @@ const SolarSystem = () => {
 
   const handleAgeCalculated = (results: {planet: PlanetData, age: number}[]) => {
     setAgeResults(results);
+  };
+  
+  // Function to scroll to a specific slide
+  const scrollToSlide = (index: number) => {
+    if (emblaApi) {
+      emblaApi.scrollTo(index);
+    }
   };
   
   return (
@@ -165,63 +188,68 @@ const SolarSystem = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl font-space font-bold text-cosmic-accent1 mb-6 text-center">
+            <h2 className="text-2xl font-space font-bold text-cosmic-accent2 mb-6 text-center">
               Your Cosmic Age Journey
             </h2>
-            <Carousel className="w-full">
-              <CarouselContent>
-                {ageResults.map(({ planet, age }) => (
-                  <CarouselItem key={planet.id} className="md:basis-1/2 lg:basis-1/3">
-                    <motion.div 
-                      className="p-6 rounded-xl backdrop-blur-md h-full"
-                      style={{ backgroundColor: `${planet.color}20`, border: `1px solid ${planet.color}40` }}
-                      whileHover={{ scale: 1.03, boxShadow: `0 10px 25px ${planet.color}30` }}
-                    >
-                      <div className="flex items-center gap-4 mb-3">
-                        <div 
-                          className="w-16 h-16 rounded-full shrink-0"
-                          style={{ 
-                            backgroundImage: `url(${planet.texture})`,
-                            backgroundSize: 'cover',
-                            boxShadow: `0 0 15px ${planet.color}40`
-                          }}
-                        ></div>
-                        <div>
-                          <h3 className="text-xl font-space font-bold" style={{ color: planet.color }}>
-                            {planet.name}
-                          </h3>
-                          <div className="text-3xl font-space font-bold mt-1 flex items-baseline gap-2">
-                            <span style={{ color: planet.color }}>{age}</span>
-                            <span className="text-white/70 text-lg">years old</span>
+            <div className="relative">
+              <Carousel ref={emblaRef} className="w-full">
+                <CarouselContent>
+                  {ageResults.map(({ planet, age }) => (
+                    <CarouselItem key={planet.id} className="md:basis-1/2 lg:basis-1/3">
+                      <motion.div 
+                        className="p-6 rounded-xl backdrop-blur-md h-full"
+                        style={{ backgroundColor: `${planet.color}20`, border: `1px solid ${planet.color}40` }}
+                        whileHover={{ scale: 1.03, boxShadow: `0 10px 25px ${planet.color}30` }}
+                      >
+                        <div className="flex items-center gap-4 mb-3">
+                          <div 
+                            className="w-16 h-16 rounded-full shrink-0 bg-cover"
+                            style={{ 
+                              backgroundImage: `url(${planet.texture})`,
+                              boxShadow: `0 0 15px ${planet.color}40`
+                            }}
+                          ></div>
+                          <div>
+                            <h3 className="text-xl font-space font-bold" style={{ color: planet.color }}>
+                              {planet.name}
+                            </h3>
+                            <div className="text-3xl font-space font-bold mt-1 flex items-baseline gap-2">
+                              <span style={{ color: planet.color }}>{age}</span>
+                              <span className="text-white/70 text-lg">years old</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <p className="text-white/80 text-sm">
-                        {planet.description}
-                      </p>
-                    </motion.div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className="flex justify-center mt-4 gap-2">
-                <CarouselPrevious className="position-static transform-none" />
-                <CarouselNext className="position-static transform-none" />
-              </div>
-              
-              {/* Carousel Indicators */}
-              <div className="flex justify-center mt-4">
-                <div className="flex gap-1.5">
-                  {ageResults.map((_, index) => (
-                    <div 
-                      key={index}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === 0 ? 'bg-cosmic-accent1 w-4' : 'bg-white/30'
-                      }`}
-                    />
+                        <p className="text-white/80 text-sm">
+                          {planet.description}
+                        </p>
+                      </motion.div>
+                    </CarouselItem>
                   ))}
+                </CarouselContent>
+                <div className="flex justify-center mt-4 gap-2">
+                  <CarouselPrevious className="position-static transform-none" />
+                  <CarouselNext className="position-static transform-none" />
                 </div>
-              </div>
-            </Carousel>
+                
+                {/* Clickable Carousel Indicators */}
+                <div className="flex justify-center mt-4">
+                  <div className="flex gap-1.5">
+                    {ageResults.map((_, index) => (
+                      <Button
+                        key={index}
+                        variant="ghost"
+                        size="icon"
+                        className={`p-0 h-2 min-w-2 rounded-full transition-all duration-300 ${
+                          index === activeSlide ? 'bg-cosmic-accent2 w-4' : 'bg-white/30 hover:bg-white/50'
+                        }`}
+                        onClick={() => scrollToSlide(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </Carousel>
+            </div>
           </motion.div>
         )}
         

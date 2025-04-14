@@ -73,10 +73,9 @@ const LightSpeedVisualizer: React.FC<LightSpeedVisualizerProps> = ({ planets, se
                   <div className="flex items-center">
                     <div className="relative">
                       <div 
-                        className="w-8 h-8 rounded-full overflow-hidden"
+                        className="w-8 h-8 rounded-full overflow-hidden bg-cover bg-center"
                         style={{ 
                           backgroundImage: `url(${selectedPlanet.texture})`,
-                          backgroundSize: 'cover'
                         }}
                       />
                       {animating && (
@@ -105,10 +104,9 @@ const LightSpeedVisualizer: React.FC<LightSpeedVisualizerProps> = ({ planets, se
                     </div>
                     
                     <div 
-                      className="w-8 h-8 rounded-full overflow-hidden"
+                      className="w-8 h-8 rounded-full overflow-hidden bg-cover bg-center"
                       style={{ 
                         backgroundImage: `url(${planet.texture})`,
-                        backgroundSize: 'cover'
                       }}
                     />
                   </div>

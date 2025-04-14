@@ -81,21 +81,20 @@ const AgeCalculator: React.FC<AgeCalculatorProps> = ({ planets, onCalculate }) =
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {results.map(({ planet, age }) => (
+            {results.map(({ planet, age }, index) => (
               <motion.div 
                 key={planet.id}
                 className="p-4 rounded-lg backdrop-blur-sm"
                 style={{ backgroundColor: `${planet.color}20` }}
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.3, delay: results.findIndex(r => r.planet.id === planet.id) * 0.1 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 <div className="flex items-center gap-3">
                   <div 
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10 rounded-full bg-cover bg-center"
                     style={{ 
                       backgroundImage: `url(${planet.texture})`,
-                      backgroundSize: 'cover',
                       boxShadow: `0 0 10px ${planet.color}40`
                     }}
                   ></div>
