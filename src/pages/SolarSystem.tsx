@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Layout from '../components/layout/Layout';
@@ -16,6 +15,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 58.6,
     orbitPeriod: 88,
     description: 'The smallest and innermost planet, Mercury experiences extreme temperature variations and has virtually no atmosphere.',
+    funFact: 'Mercury's day-night temperature swing is the most extreme in the solar system, ranging from 800°F (430°C) during the day to -290°F (-180°C) at night.',
     color: 'rgb(180, 180, 180)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/mercury_1k.jpg'
   },
@@ -26,6 +26,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 243,
     orbitPeriod: 225,
     description: 'Venus has a thick atmosphere that traps heat, making it the hottest planet in our solar system despite not being the closest to the Sun.',
+    funFact: 'Venus rotates in the opposite direction to most planets, meaning the sun rises in the west and sets in the east. A single day on Venus is longer than its entire year!',
     color: 'rgb(255, 198, 73)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/venus_1k.jpg'
   },
@@ -36,6 +37,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 1,
     orbitPeriod: 365.25,
     description: 'Our home planet is the only known world that supports life, with liquid water on its surface and an oxygen-rich atmosphere.',
+    funFact: 'Earth is the only planet not named after a god. It also has the highest density of any planet in our solar system and is the only one with tectonic plates.',
     color: 'rgb(30, 144, 255)',
     texture: 'https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg'
   },
@@ -46,6 +48,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 1.03,
     orbitPeriod: 687,
     description: 'The "Red Planet" has polar ice caps, seasons, and evidence of ancient rivers and lakes, making it a prime target for the search for life.',
+    funFact: 'Mars is home to Olympus Mons, the tallest mountain in our solar system at 72,000 ft (22km) high, nearly three times the height of Mount Everest.',
     color: 'rgb(255, 69, 0)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/mars_1k.jpg'
   },
@@ -56,6 +59,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 0.41,
     orbitPeriod: 4333,
     description: 'The largest planet in our solar system, Jupiter is a gas giant with a distinctive Great Red Spot and dozens of moons.',
+    funFact: 'Jupiter's Great Red Spot is a storm that has been raging for at least 400 years and is large enough to fit three Earths inside it.',
     color: 'rgb(255, 165, 0)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/jupiter_1k.jpg'
   },
@@ -66,6 +70,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 0.45,
     orbitPeriod: 10759,
     description: 'Famous for its stunning ring system, Saturn is a gas giant composed primarily of hydrogen and helium.',
+    funFact: 'Saturn's rings are made of billions of ice particles, ranging in size from tiny dust grains to chunks as big as houses. Despite being huge, they're remarkably thin—just 10 meters thick in some places.',
     color: 'rgb(218, 165, 32)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/saturn_1k.jpg'
   },
@@ -76,6 +81,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 0.72,
     orbitPeriod: 30687,
     description: 'Uranus is an ice giant that rotates on its side, giving it extreme seasonal variations and unusual magnetic field behavior.',
+    funFact: 'Uranus rotates on its side with an axial tilt of about 98 degrees, likely caused by a massive collision in the early solar system. This gives it seasons lasting 21 Earth years!',
     color: 'rgb(0, 255, 255)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/uranus_1k.jpg'
   },
@@ -86,6 +92,7 @@ const planetData: PlanetData[] = [
     rotationPeriod: 0.67,
     orbitPeriod: 60190,
     description: 'The windiest planet in our solar system, Neptune is a distant ice giant with a dynamic atmosphere featuring visible weather patterns.',
+    funFact: 'Neptune has the strongest winds in the solar system, reaching speeds of 1,200 mph (2,000 km/h) – nearly five times stronger than Earth's most powerful hurricanes.',
     color: 'rgb(0, 0, 255)',
     texture: 'https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/neptune_1k.jpg'
   }
@@ -198,6 +205,20 @@ const SolarSystem = () => {
               <div className="flex justify-center mt-4 gap-2">
                 <CarouselPrevious className="position-static transform-none" />
                 <CarouselNext className="position-static transform-none" />
+              </div>
+              
+              {/* Carousel Indicators */}
+              <div className="flex justify-center mt-4">
+                <div className="flex gap-1.5">
+                  {ageResults.map((_, index) => (
+                    <div 
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        index === 0 ? 'bg-cosmic-accent1 w-4' : 'bg-white/30'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </Carousel>
           </motion.div>

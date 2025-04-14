@@ -11,6 +11,7 @@ export type PlanetData = {
   description: string;
   color: string;
   texture: string;
+  funFact?: string; // Added fun fact property
 };
 
 type PlanetCardProps = {
@@ -37,6 +38,20 @@ const PlanetCard: React.FC<PlanetCardProps> = ({ planet, currentTime, onClick, i
     const hours = Math.floor(planetHours);
     const minutes = Math.floor((planetHours - hours) * 60);
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  };
+  
+  // Get the content to display when expanded - prefer fun fact if available
+  const getExpandedContent = () => {
+    if (planet.funFact) {
+      return (
+        <div className="mt-1">
+          <div className="text-cosmic-accent2 font-bold text-xs mb-1">FUN FACT</div>
+          <p>{planet.funFact}</p>
+        </div>
+      );
+    }
+    
+    return <p>{planet.description}</p>;
   };
   
   return (
@@ -94,7 +109,7 @@ const PlanetCard: React.FC<PlanetCardProps> = ({ planet, currentTime, onClick, i
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
         >
-          <p>{planet.description}</p>
+          {getExpandedContent()}
         </motion.div>
       )}
     </motion.div>
