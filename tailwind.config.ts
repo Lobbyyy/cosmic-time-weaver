@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom cosmic theme colors
+				cosmic: {
+					DEFAULT: '#0B0E18', // Deep space background
+					accent1: '#00E5FF', // Cyan glow
+					accent2: '#FF00FF', // Magenta glow
+					accent3: '#FFD700', // Gold glow  
+					accent4: '#1E90FF', // Electric blue
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -70,25 +79,46 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { opacity: '0.6' },
+					'50%': { opacity: '1' }
+				},
+				'rotate-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' }
+				},
+				'particles': {
+					'0%': { transform: 'translateY(0) translateX(0)', opacity: '0' },
+					'50%': { opacity: '0.8' },
+					'100%': { transform: 'translateY(-80px) translateX(20px)', opacity: '0' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 6s ease-in-out infinite',
+				'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+				'rotate-slow': 'rotate-slow 120s linear infinite',
+				'particles': 'particles 8s ease-in-out infinite'
+			},
+			fontFamily: {
+				'space': ['Space Grotesk', 'sans-serif'],
+				'inter': ['Inter', 'sans-serif']
+			},
+			backgroundImage: {
+				'cosmic-gradient': 'linear-gradient(225deg, rgba(11,14,24,1) 0%, rgba(20,24,45,1) 100%)',
+				'planet-glow': 'radial-gradient(circle, rgba(0,229,255,0.15) 0%, rgba(0,0,0,0) 70%)'
 			}
 		}
 	},
