@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Clock, Globe, Planets } from 'lucide-react';
+import { Clock, Globe, Orbit } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
@@ -50,7 +50,7 @@ const Navbar = () => {
             <span className="font-space tracking-wide text-sm">EARTH TIME</span>
           </Link>
           <Link to="/solar-system" className={`flex items-center gap-2 py-2 px-4 rounded-full transition-all duration-300 ${location.pathname === '/solar-system' ? 'bg-white/10 text-cosmic-accent2' : 'text-white/70 hover:text-white'}`}>
-            <Planets size={16} />
+            <Orbit size={16} />
             <span className="font-space tracking-wide text-sm">SOLAR SYSTEM</span>
           </Link>
         </div>
